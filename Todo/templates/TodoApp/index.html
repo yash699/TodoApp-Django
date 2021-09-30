@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style type="text/css">  
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index:1200;
+    
+  }
+  .event
+  { pointer-events: none;
+
+  }
+</style>
+<div class="spinner-border text-muted centered" ></div>
+
+
+<div class="container mt-3 mb-4">
+  
+
+  {% if messages %}
+ 
+        {% for msg in messages %}
+ 
+        <div class="alert alert-{{msg.level_tag}} " role="alert">
+ 
+            {{msg.message}}
+        </div>
+ 
+        {% endfor %}
+ 
+  {% endif %}
+
+  <div class="card">
+    <div class="card-body">
+      <form  action="add_task" class="d-flex form_class" autocomplete="off" method="POST">
+        {% csrf_token %}
+        <input type="text" class="form-control" placeholder="Enter Task....." name="task" required>
+          
+        <button type="submit" class="btn btn-primary" style="margin-left: 10px!important;
+">ADD</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<div class="container mt-3">
+
+
+    <ul class="list-group bg-secondary">
+      {% for todo in todos %}
+            <li class="list-group-item ">
+              <div style="float:left!important">
+                {{todo.task}}
+              </div>
+              <div style="float:right!important">
+                <form  action="delete/{{todo.id}}" method="POST" class="form_class">
+                   {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+              </div>
+
+            </li>
+        {% endfor %}
+
+      
+
+     
+      
+    </ul>
+  
+</div>
+
+<script>
+  setTimeout(function(){ $('.alert').hide(); }, 3000);
+$('.spinner-border').hide();
+  $(".form_class").submit(function(){
+    $('.spinner-border').show();
+      $("body").addClass("event");
+
+
+  });
+</script>
+
+{% endblock %}
+
